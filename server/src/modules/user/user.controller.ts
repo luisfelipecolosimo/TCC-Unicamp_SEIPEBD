@@ -32,6 +32,7 @@ export class UsuarioController {
                 content: usuario,
             };
         } catch (err) {
+          console.error(err);
             return {
                 status: 400,
                 message: 'Erro ao registrar usuário',
@@ -80,7 +81,14 @@ export class UsuarioController {
   async listarPorPergunta(@Param('id') id: number) {
     return await this.usuarioService.listarPorPergunta(id);
   }
+
+     @Get('resposta/:id')
+  @ApiOperation({ summary: '' })
+  async RetornaPergunta(@Param('id') id: number) {
+    return await this.usuarioService.RetornaPergunta(id);
+  }
  
+  
 
     @Get('blocos/:id')
   @ApiOperation({ summary: 'Lista blocos de resposta de uma pergunta' })
@@ -95,7 +103,7 @@ export class UsuarioController {
   }
 
 
-  @Get(':historico/usuario/:usuario')
+  @Get('historico/usuario/:usuario')
   @ApiOperation({ summary: 'Lista o histórico de respostas de um usuário' })
   async listarPorUsuario(@Param('usuario') usuario: number) {
     return await this.usuarioService.listarPorUsuario(usuario);
@@ -115,4 +123,21 @@ export class UsuarioController {
     }
      return await this.usuarioService.salvarHistorico(info);
   }
+
+  @Get('pergunta/unica/:id')
+async getPerguntaUnica(@Param('id') id: number) {
+  return await this.usuarioService.getPerguntaUnica(id);
+}
+
+@Get('pergunta/proxima/:id')
+async proxima(@Param('id') id: number) {
+  return await this.usuarioService.getProximaPergunta(id);
+}
+
+@Post('score/somar')
+async somarScore(@Body() body: { usuario: number, pontos: number }) {
+  return await this.usuarioService.somarScore(body.usuario, body.pontos);
+}
+
+
 }

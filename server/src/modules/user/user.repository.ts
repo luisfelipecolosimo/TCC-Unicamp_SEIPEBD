@@ -10,23 +10,30 @@ import { AlternativaModel } from "./models/alternativa.model";
 import { BlocoRespostaModel } from "./models/bloco_resposta.model";
 import { TemaPerguntaModel } from "./models/tema_pergunta.model";
 import { HistoricoRespostasModel } from "./models/historico_respostas.model";
+import { ScoreModel } from "./models/score.model";
+import { ComentarioModel } from "./models/comentario.model";
 
 
 @Injectable()
 export class UsuarioRepository {
     constructor(
-        @InjectRepository(UsuarioModel, "MYSQL_CONNECTION")
-        private usuarioRepository: Repository<UsuarioModel>,
-        @InjectRepository(PerguntaModel, "MYSQL_CONNECTION")
-        private  perguntaRepository: Repository<PerguntaModel>,
         @InjectRepository(AlternativaModel, "MYSQL_CONNECTION")
         private alternativaModel: Repository<AlternativaModel>,
         @InjectRepository(BlocoRespostaModel, "MYSQL_CONNECTION")
         private  blocoRespostaModel: Repository<BlocoRespostaModel>,
+        @InjectRepository(ComentarioModel, "MYSQL_CONNECTION")
+        private  comentarioModel: Repository<ComentarioModel>,
+        @InjectRepository(UsuarioModel, "MYSQL_CONNECTION")
+        private usuarioRepository: Repository<UsuarioModel>,
+        @InjectRepository(PerguntaModel, "MYSQL_CONNECTION")
+        private  perguntaRepository: Repository<PerguntaModel>,
         @InjectRepository(TemaPerguntaModel, "MYSQL_CONNECTION")
         private temaPerguntaModel: Repository<TemaPerguntaModel>,
         @InjectRepository(HistoricoRespostasModel, "MYSQL_CONNECTION")
         private  historicoRespostasModel: Repository<HistoricoRespostasModel>,
+        @InjectRepository(ScoreModel, "MYSQL_CONNECTION")
+        private  scoreModel: Repository<ScoreModel>,
+        
     ) { }
 
     /**
@@ -65,7 +72,9 @@ export class UsuarioRepository {
      * @param senha Senha em texto plano
      */
     async login(usuario: string, senha: string): Promise<UsuarioModel | null> {
+      console.log("Tentando login para usuário:", usuario);
         const senhaMd5 = md5(senha);
+        console.log("Senha MD5 gerada:", senhaMd5);
         const user = await this.usuarioRepository.findOne({
             where: {
                 usuario,
@@ -86,6 +95,11 @@ export class UsuarioRepository {
     return await this.perguntaRepository.find({
       where: { tema: { id: idTema } },
       relations: ['tema'],
+    });
+  }
+    async RetornaPergunta(id: number): Promise<PerguntaModel[]> {
+    return await this.perguntaRepository.find({
+      where: { id: id },
     });
   }
 
@@ -120,5 +134,23 @@ export class UsuarioRepository {
       order: { data_resposta: 'DESC' },
     });
   }
+
+  async buscarPerguntaUnica(id: number) {
+  return await this.perguntaRepository.findOne({
+    where: { id },
+    relations: ['tema']
+  });
+}
+async buscarProximaPergunta(id: number) {
+  return await this.perguntaRepository.findOne({
+    where: { id: id + 1 }
+  });
+}
+
+async incrementarScore(usuario: number, pontos: number) {
+  await this.scoreModel.increment({ id_usuario: usuario }, "pontuacao", pontos);
+  return await this.scoreModel.findOne({ where: { id_usuario: usuario } });
+}
+
 
 }

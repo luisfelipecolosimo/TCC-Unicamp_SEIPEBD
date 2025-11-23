@@ -63,6 +63,9 @@ export class UsuarioService {
     return await this.usuarioRepository.listarPorPergunta(idPergunta);
   }
 
+      async RetornaPergunta(idPergunta: number) {
+    return await this.usuarioRepository.RetornaPergunta(idPergunta);
+  }
   
   async listarPorPerguntaBloco(idPergunta: number) {
     return await this.usuarioRepository.listarPorPerguntaBloco(idPergunta);
@@ -81,4 +84,18 @@ export class UsuarioService {
   async listarPorUsuario(idUsuario: number) {
     return await this.usuarioRepository.listarPorUsuario(idUsuario);
   }
+
+  async getPerguntaUnica(id: number) {
+  return this.usuarioRepository.buscarPerguntaUnica(id);
+}
+
+async getProximaPergunta(id: number) {
+  return this.usuarioRepository.buscarProximaPergunta(id);
+}
+
+async somarScore(idUsuario: number, pontos: number) {
+  return await this.usuarioRepository.incrementarScore(idUsuario, pontos);
+}
+
+
 }

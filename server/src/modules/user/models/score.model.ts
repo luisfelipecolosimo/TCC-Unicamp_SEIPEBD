@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
-import { UsuarioModel } from './usuario.model';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+
 
 @Entity({ name: 'score' })
 export class ScoreModel {
@@ -9,10 +9,9 @@ export class ScoreModel {
   @PrimaryGeneratedColumn({ name: 'id_score', type: 'int' })
   id: number;
 
-  @ApiProperty()
-  @ManyToOne(() => UsuarioModel)
-  @JoinColumn({ name: 'id_usuario' })
-  usuario: UsuarioModel;
+    @ApiProperty()
+  @Column({ name: 'id_usuario', type: 'int', default: 0 })
+  id_usuario: number;
 
   @ApiProperty()
   @Column({ name: 'pontuacao', type: 'int', default: 0 })
