@@ -1,5 +1,5 @@
 import axios from "axios";
 
 export const api = axios.create({
-  baseURL: "http://192.168.1.109:9900/tcc/api/usuario",
+  baseURL: "http://192.168.1.110:9900/tcc/api/usuario",
 });

@@ -33,7 +33,7 @@ export default function LoginScreen() {
   }else{
     alert("Erro no login: " + res.data.message);
   }
-  router.replace("/(tabs)"); 
+ // router.replace("/(tabs)"); 
 };
 
 

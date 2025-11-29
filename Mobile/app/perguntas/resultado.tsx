@@ -46,7 +46,7 @@ export default function Resultado() {
 
             <TouchableOpacity
                 style={styles.botao}
-                onPress={() => router.replace("/perguntas/perguntas")}
+                onPress={() => router.replace("/perguntas")}
             >
                 <Text style={styles.botaoTexto}>Voltar à Seleção de Perguntas</Text>
             </TouchableOpacity>
